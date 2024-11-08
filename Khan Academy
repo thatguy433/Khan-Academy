@@ -1,0 +1,96 @@
+khan-academy-private-browser/
+├── background.js
+├── manifest.json
+├── popup.html
+├── popup.js
+├── icons/
+│   ├── 16.png
+│   ├── 48.png
+│   └── 128.png
+{
+  "manifest_version": 3,
+  "name": "Khan Academy Private Browser",
+  "description": "A private browsing extension for Khan Academy to keep your learning sessions clean and private.",
+  "version": "1.0",
+  "permissions": [
+    "tabs",
+    "browsingData",
+    "cookies",
+    "history",
+    "storage",
+    "activeTab"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icons/16.png",
+      "48": "icons/48.png",
+      "128": "icons/128.png"
+    }
+  },
+  "icons": {
+    "16": "icons/16.png",
+    "48": "icons/48.png",
+    "128": "icons/128.png"
+  },
+  "host_permissions": [
+    "https://www.khanacademy.org/*"
+  ]
+}
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Khan Academy Private Browser</title>
+    <style>
+      body {
+        width: 200px;
+        padding: 10px;
+        font-family: Arial, sans-serif;
+      }
+      button {
+        width: 100%;
+        padding: 10px;
+        margin: 5px 0;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <h3>Khan Academy Privacy</h3>
+    <button id="clearData">Clear Browsing Data</button>
+    <button id="openPrivateTab">Open Khan Academy in Private Mode</button>
+  </body>
+  <script src="popup.js"></script>
+</html>
+document.getElementById('clearData').addEventListener('click', function() {
+  // Clear browsing data (cookies, cache, history)
+  chrome.browsingData.remove({
+    "since": 0
+  }, {
+    "history": true,
+    "cookies": true,
+    "cache": true
+  }, function() {
+    alert('Browsing data cleared!');
+  });
+});
+
+document.getElementById('openPrivateTab').addEventListener('click', function() {
+  // Open Khan Academy in an incognito tab
+  chrome.tabs.create({
+    url: "https://www.khanacademy.org",
+    incognito: true
+  });
+});
+chrome.runtime.onInstalled.addListener(() => {
+  console.log('Khan Academy Private Browser Extension Installed');
+});
+
+// You can also implement additional privacy features here if needed.
+icons/
+├── 16.png
+├── 48.png
+└── 128.png
